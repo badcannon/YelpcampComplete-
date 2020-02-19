@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+<div class="ui segment container">
+  <h1 class="text-center ui header">Add a new Campground</h1>
+  
+<form class="ui form" action="/campgrounds" method="POST" enctype="multipart/form-data">
+  <div class="field">
+    <label>Campground Name:</label>
+    <input type="text" class="form-control" name="campground[name]" placeholder="Name" />
+  </div>
+  <div class="field">
+    <label>Image Upload:</label>
+    <input type="file" class="form-control" name="image" placeholder="Image Url" accept="image/*"/> 
+   </div>
+  <div class="field">
+    <label>Location</label>
+    <input type="text" class="form-control" name="campground[location]" placeholder="Location" />
+  </div>
+  <div class="field">
+    <label>Price :</label>
+    <input type="number" class="form-control" name="campground[price]" placeholder="price" min=0.1 />
+  </div>
+  <div class="field">
+    <label>Description:</label>
+    <input type="text" class="form-control" name="campground[description]" placeholder="Description" />
+  </div>
+  <button type="submit" class="ui left attached button" >Submit</button>
+  <a href="/campgrounds"  class="right attached ui button">Back</a>
+</form>
+
+</div>
+<%- include('../partials/footer') %>

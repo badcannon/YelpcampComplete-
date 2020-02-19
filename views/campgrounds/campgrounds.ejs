@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<div class="ui container" >
+  <div class="ui segment">
+    <div class="container">
+      <h1 class="ui header" style="font-size: 5em;"><i class="fas fa-campground"></i>Welcome to the Campgrounds !
+      </h1>
+      <p class="ui sub-header" style="font-size:1.6em;font-style: italic;color: grey;">Best of the world campgrounds  </p>
+      <button class="ui huge button" onclick="window.open('/campgrounds/new');">
+        <i class="plus square icon"></i>
+        Add a campground
+      </button>
+    </div>  
+  </div>
+   <div class="row" style="display: flex; flex-wrap: wrap;">
+    <% campgrounds.forEach(function(listItem){ %>
+<div class="column computer tablet four wide" style="margin-left: 15px; margin-bottom: 15px;">
+<div class="ui card">
+  <div class="content">
+    <div class="right floated meta"><%=moment(listItem.createdDate).fromNow()%></div>
+    <img class="ui avatar image" src="<%=listItem.author.image%>"> <%=listItem.author.username%>
+  </div>
+  <div class="image">
+    <img src="<%=listItem.image%>">
+  </div>
+  <div class="content">
+    <div class="ui header"> 
+      <%=listItem.name%>
+    </div>
+    <span class="right floated">
+      <i class="heart outline like icon"></i>
+      17 likes
+    </span>
+    <i class="comment icon"></i>
+     <%=listItem.comment.length%> comments
+  </div>
+  <div class="extra content">
+    <div class="ui large transparent left icon input">
+      <a href="/campgrounds/<%=listItem._id%>"class="ui button">More Info</a>     
+    </div>
+  </div>
+</div>
+</div>
+    <%});%>
+    <div style="display: flex; justify-content:right; align-items: center; margin-left: 90%;">
+      <a href="/" class="ui button">Go back</a>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

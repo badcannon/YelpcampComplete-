@@ -1,0 +1,208 @@
+<%- include('../partials/header') %>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      width: 100%;
+      height:500px;
+    }
+    .marker {
+        background-image: url('https://docs.mapbox.com/help/demos/custom-markers-gl-js/mapbox-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        }
+
+    .mapboxgl-popup {
+    max-width: 200px;
+    }
+
+    .mapboxgl-popup-content {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    }
+
+
+    .hidden{
+      display: none;
+    }
+
+  </style>
+<div class="ui grid">
+<div class="row">
+    <div class="four wide column">
+        <h1 class="header block ui">YelpCamp</h1>
+        <div class="ui divided items">
+          <div class="item">
+            <div class="ui mini image">
+              <img src="https://img.icons8.com/cotton/2x/worldwide-location--v2.png">
+            </div>
+            <div class="middle aligned content">
+              <h5>Location</h5>
+              <%=data.location%>  
+            </div>
+          </div>
+          <div class="item">
+            <div class="ui mini image">
+              <img src="https://cdn4.iconfinder.com/data/icons/significon/512/Significon-Eye-512.png">
+            </div>
+            <div class="middle aligned content">
+              <h5>Views</h5>
+              1000
+            </div>
+          </div>
+          <div class="item">
+            <div class="ui mini image">
+              <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Instagram-Like-Icon-715x715.png">
+            </div>
+            <div class="middle aligned content">
+              <h5>Likes</h5>
+              200
+            </div>
+          </div>
+        </div>
+            <!--Heere !-->
+            <div id='map' class="ui rounded"></div>
+    </div>
+    <div class="eleven wide column">
+      <div class="ui segment">
+        <div class="ui fluid rounded image">
+         <img class="img-responsive" src="<%=data.image%>" width="500px" height="500px" />
+        </div>
+        <div class="content">
+            <h4 class="" style="float: right;">$<%=data.price%>/Night</h4>
+            <h4 class="header ui huge"><a><%=data.name%></a></h4>
+            <p class="text"><%=data.description%></p>
+            <p><em>Submitted by :<a href="/users/<%=data.author.id%>"><%=data.author.username%></a> </em><span class="" style="float: right;"> <%=moment(data.createdDate).fromNow()%> </span>
+            </p>
+            <%if(currentUser && (data.author.id.equals(currentUser._id))){%>
+            <form class="delete-form" action="/campgrounds/<%=data._id%>?_method=DELETE" method="POST" >
+            <a href="/campgrounds/<%=data._id%>/edit" class=" ui button attached left inverted yellow">Edit</a>
+            <button class="ui button attached right inverted red" type="submit">Delete</button>    
+            </form>
+            <%}%>
+         </div>
+        </div>
+                <div class="ui container"   style="position: relative; left:81.2%;">
+                     <button class="ui button inverted green">Add a Comment</button>
+                </div>
+                <h2 class="header block ui ">Comments</h2>
+                <%data.comment.forEach((com)=>{%>
+                  <div class="ui comments">
+                    <div class="comment">
+                      <a class="avatar">
+                        <img src="<%=com.author.image%>">
+                      </a>
+                      <div class="content">
+                        <a class="author"><%=com.author.username%></a>
+                        <div class="text" id="<%=com._id%>">
+                          <%=com.text%>
+                        </div>
+                        <%if(currentUser && (com.author.id.equals(currentUser._id))){%>
+                        <div class="actions">
+                          <a id="<%=com._id%>" class=" ui button mini editBtn">Edit</a>
+                          <form action="/campgrounds/<%=data._id%>/comments/<%=com._id%>?_method=DELETE" method="POST" class="delete-form">
+                            <button class="ui button mini">Delete</button>
+                          </form>
+                        </div>
+                        <%}%>
+                      </div>
+                    </div>
+                  </div>
+                    <%});%>
+                    <div class="hiddenEdit hidden">
+                      <form action="" class="ui form" method="POST">
+                          <div class="field"><input type="text" id="CommentEdit"   name="comment[text]" placeholder="Text" /></div>
+                        <div class="field"> </div><button type="submit" class="ui button inverted green">reply</button></div>
+                      </form>                  
+                    <div class="hiddenNew hidden">
+                      <form action="/campgrounds/<%=data._id%>/comments" class="ui form" method="POST">
+                          <div class="field"><input type="text"   name="comment[text]" placeholder="Text" /></div>
+                        <div class="field"> </div><button type="submit" class="ui button inverted green">reply</button></div>
+                      </form>                  
+            </div>
+</div>
+</div>
+<script>
+    var longitude = <%=data.longitude%>;
+    var latitude = <%=data.latitude%>;
+    var des = "<%=data.location%>";
+    var titleName = "<%=data.name%>";
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYmFkY2Fubm9uIiwiYSI6ImNrNHk0OG1odTA3OHEzbW1uZ3ZzeHVnb3AifQ.xWEtr69OS7zEN2c6rT4XJw';
+    var geojson = {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [longitude,latitude]
+        },
+        properties: {
+          title: titleName,
+          description: des
+        }
+      }]
+    };
+    
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v10',
+      center: [longitude,latitude],
+      zoom: 3
+    });
+    
+    
+    // code from the next step will go here!
+    // add markers to map
+    geojson.features.forEach(function(marker) {
+    
+    // create a HTML element for each feature
+    var el = document.createElement('div');
+    el.className = 'marker';
+    
+    // make a marker for each feature and add to the map
+ 
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+         .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+        .addTo(map);
+    });
+    var hiddenEdit = document.querySelector(".hiddenEdit");
+    var button = document.querySelector(".ui.button.inverted.green");
+    var hiddenNew = document.querySelector(".hiddenNew");
+    button.addEventListener("click",function(event){
+      hiddenNew.classList.toggle("hidden");   
+      hiddenEdit.classList.add("hidden");   
+    });
+
+    var CommentID = document.querySelectorAll(".editBtn");
+    var hiddenEdit = document.querySelector(".hiddenEdit");
+    var EditForm = document.querySelector(".hiddenEdit > form");
+    var InputField = document.querySelector("#CommentEdit");
+    CommentID.forEach((comment)=>{
+      comment.addEventListener("click",function(event){
+
+        hiddenNew.classList.add("hidden");
+        var URLGen = "/campgrounds/<%=data._id%>/comments/"+this.getAttribute("id")+"?_method=PUT";
+        var TextValue = document.getElementById(this.getAttribute("id"));
+        hiddenEdit.classList.toggle("hidden");
+        InputField.value = TextValue.textContent.trim();
+        EditForm.setAttribute("action",URLGen);
+
+});
+    })
+    </script>
+    <%- include('../partials/footer') %>
+
+
+    

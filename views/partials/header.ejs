@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>YelpCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body >
+  <div class="ui huge stackable menu">
+    <div class="item">
+      <a  href="/"><i class="fas fa-campground"></i>YelpCamp</a>
+    </div>
+      <a class="item" href="/campgrounds">Campgrounds</a>
+  
+    <div class="right menu">
+    <% if(!currentUser) { %>
+      <a class="item" href="/login">Login</a>
+      <a class="item" href="/register">Sign Up</a>
+      <%}else{%>
+      <a class="item" href="/users/<%=currentUser._id%>">
+      <img src="<%=currentUser.AvImage%>"  class=" ui image avatar" />  
+      <strong><%=currentUser.username%></strong></a>
+      <a class="item" href="/logout">Logout</a>
+      <%}%>
+      <form class="ui action input" action="/campgrounds" method="GET">
+        <input type="text" placeholder="Search" name="search">
+        <button type="submit" class="ui button">Go</button>
+      </form>
+    </div>
+  </div>
+  <div class="ui container">
+    <%if(error && error.length > 0){%>
+    <div class="ui negative message" role="alert"><div class="header"><%= error %></div></div>
+    <%}%>
+    <%if(success && success.length > 0){%>
+    <div class="ui positive message" role="alert"><div class="header"><%= success %></div></div>
+    <%}%>
+

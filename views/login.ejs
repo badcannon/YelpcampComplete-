@@ -1,0 +1,22 @@
+<%- include("partials/header") %>
+ <div class="ui form">
+    <h1 class="ui header">Login</h1>
+    <form action="/login" method="post">
+    <div class="field">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username">
+     </div>   
+     <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Password">
+    </div>  
+     <button class="ui button" type="submit">
+        <i class="user icon"></i> 
+        Login</button>
+    </form>
+</div>
+
+
+<%- include("partials/footer") %>
+
+

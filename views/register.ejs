@@ -1,0 +1,35 @@
+<%- include("partials/header") %>
+<div class="row">
+    <div class="column twelve wide">
+        
+    <h1 class="header block ui">Register</h1>
+    <form class="ui form" action="/register" method="post">
+            <div class="field">
+                <input type="text" class="form-control" placeholder="First Name" name="nohash[firstname]" required/>
+            </div>
+            <div class="field">
+                <input type="text" class="form-control" name="nohash[lastname]" placeholder="Last Name " required/>
+            </div>
+            <div class="field">
+                <input type="text" class="form-control" placeholder="Username" name="nohash[username]" required>
+            </div>
+            <div class="field">
+                <input type="password" class="form-control" name="password" placeholder="password" required/>
+             </div>
+            <div class="field" style="margin-bottom: 15px;">
+                <input type="text" class="form-control" placeholder="email"  name="nohash[email]" required>
+            </div>
+            <div class="field">
+                <input type="text" class="form-control" name="nohash[AvImage]" placeholder="Avatar image Url" required/>
+            </div>
+            <div class="field">
+                <input type="submit" class="ui button  " value="Submit"/>
+            </div>
+
+    </form>
+    </div>
+</div>
+
+
+
+<%- include("partials/footer") %>

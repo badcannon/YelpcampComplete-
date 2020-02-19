@@ -1,0 +1,48 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
+
+<div class="ui container segment">
+    <div class="ui header huge">Profile of <%=user.username%></div>
+    <div class="ui centered card">
+        <div class="image">
+          <img src="<%=user.AvImage%>">
+        </div>
+        <div class="content">
+          <a class="header"><%=user.firstname%> <%=user.lastname%></a>
+          <a href="mailto:<%=user.email%>" class="text"><%=user.email%>@gmail.com</a>
+        </div>
+      </div>  
+    </div>
+    <div class="ui container">
+    <%if(camps){%> 
+    <%camps.forEach((camp)=>{ %>
+    
+    <div class="ui link cards" style="float: left;margin-left: 15px; margin:0 15px;">
+        <div class="card">
+          <div class="image">
+            <img src="<%=camp.image%>">
+          </div>
+          <div class="content">
+            <div class="header"><%=camp.name%></div>
+            <div class="meta">
+              <a>likes</a>
+            </div>
+            <div class="description">
+                <%=camp.description.substring(10) + "..."%>
+            </div>
+          </div>
+          <div class="extra content">
+            <span class="right floated">
+              <%=moment(camp.createdDate).fromNow()%>
+            </span>
+            <span>
+              <i class="comment icon"></i>
+              <%=camp.comment.length%>
+            </span>
+          </div>
+        </div>
+        </div>
+        <%})%>
+        <%}%>
+    </div>
+<%- include("../partials/footer") %>
